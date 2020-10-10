@@ -19,6 +19,7 @@ const express    = require("express"),
 	  mongoose   = require("mongoose"), //added mongoose database
 	  passport   = require("passport"),
 	  LocalStrategy = require("passport-local"),
+	  methodOverride = require("method-override"),
 	  port  	 = process.env.PORT || 3000,
 	  Campground = require("./models/campground"),
 	  Comment    = require("./models/comment"),
@@ -46,6 +47,7 @@ app.set("view engine", "ejs");
 
 app.use(express.static(__dirname + "/public")); //__dirname something new!!!! takes whole path
 //console.log(__dirname);
+app.use(methodOverride("_method"));
 
 //SCHEMAS IN MODELS FILE NOW
 
