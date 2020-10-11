@@ -41,7 +41,7 @@ router.post("/", isLoggedIn, function (req, res) {
             // console.log(newlyCreated);
             //Redirect back to campgrounds site!
             res.redirect("/campgrounds");
-            console.log(newlyCreated);
+            //console.log(newlyCreated);
         }
     });
 });
@@ -66,14 +66,9 @@ router.get("/:id", function (req, res) {
 });
 
 //EDIT ROUTE
-router.get("/:id/edit", (req, res) => {
+router.get("/:id/edit", checkCampgroundOwnership, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) =>{
-        if(err) {
-            console.log(err);
-            res.redirect("/campgrounds");
-        } else { 
-                res.render("campgrounds/edit", {campground: foundCampground});
-        }
+        res.render("campgrounds/edit", {campground: foundCampground});
     });
 });
 
@@ -107,6 +102,27 @@ function isLoggedIn(req, res, next) {
         return next();
     }
     res.redirect("/login");
+}
+
+function checkCampgroundOwnership(req, res, next) {
+    if (req.isAuthenticated()) {
+        Campground.findById(req.params.id, (err, foundCampground) => {
+            if (err) {
+                console.log(err);
+                res.redirect("back");
+            } else {
+                //Does user own the campground?
+                if (foundCampground.author.id.equals(req.user._id)) {
+                    next();
+                } else {
+                    res.redirect("back");
+                }
+            }
+        });
+    } else {
+        console.log("You need to be logged in!");
+        res.redirect("back"); // SEND USER TO PAGE THEY WERE ON LAST
+    }
 }
 
 module.exports = router; //Returning router variable

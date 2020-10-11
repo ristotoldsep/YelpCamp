@@ -37,7 +37,8 @@ const commentRoutes     = require("./routes/comments"),
 //APP CONFIG
 mongoose.connect('mongodb://localhost:27017/yelp_camp_v4', { //connected to a yelpcamp DB
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 })
 .then(() => console.log('Connected to DB!!'))
 .catch(error => console.log(error.message)); //CALLED PROMISES, had to add with new version of mongoose
