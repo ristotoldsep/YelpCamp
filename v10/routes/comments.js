@@ -52,8 +52,37 @@ router.post("/", isLoggedIn, (req, res) => {
     //redirect campground show page
 }); 
 
-router.get("/:comment_id/edit", (req, res) => {
-    res.send("Edit comment");
+//COMMENTS EDIT = SHOW EDIT FORM ROUTE
+router.get("/:comment_id/edit", checkCommentOwnership, (req, res) => {
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+        if(err) {
+            res.redirect("back");
+        } else {
+            res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
+        }
+    });
+});
+
+//COMMENTS UPDATE ROUTE
+router.put("/:comment_id", (req, res) => {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment) => {
+       if(err) {
+           res.redirect("back");
+       } else {
+           res.redirect("/campgrounds/" + req.params.id);
+       }
+    });
+});
+
+//COMMENT DESTROY ROUTE
+router.delete("/:comment_id", (req, res) => {
+   Comment.findByIdAndRemove(req.params.comment_id, (err) => {
+       if (err) {
+           res.redirect("back");
+       } else {
+           res.redirect("/campgrounds/" + req.params.id);
+       }
+   });
 });
 
 //MIDDLEWARE
@@ -62,6 +91,28 @@ function isLoggedIn(req, res, next) {
         return next();
     }
     res.redirect("/login");
+}
+
+function checkCommentOwnership(req, res, next) {
+    //Is user logged in?
+    if (req.isAuthenticated()) {
+        Comment.findById(req.params.comment_id, (err, foundComment) => {
+            if (err) {
+                console.log(err);
+                res.redirect("back");
+            } else {
+                //Does user own the campground?
+                if (foundCampground.author.id.equals(req.user._id)) {
+                    next();
+                } else {
+                    res.redirect("back");
+                }
+            }
+        });
+    } else {
+        console.log("You need to be logged in!");
+        res.redirect("back"); // SEND USER TO PAGE THEY WERE ON LAST
+    }
 }
 
 module.exports = router; //Returning router variable
