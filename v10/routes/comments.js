@@ -52,6 +52,10 @@ router.post("/", isLoggedIn, (req, res) => {
     //redirect campground show page
 }); 
 
+router.get("/:comment_id/edit", (req, res) => {
+    res.send("Edit comment");
+});
+
 //MIDDLEWARE
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
