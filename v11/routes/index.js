@@ -1,3 +1,5 @@
+const user = require("../models/user");
+
 const express = require("express"),
        router = express.Router(),
      passport = require("passport"),
@@ -27,11 +29,11 @@ router.post("/register", (req, res) => {
     var newUser = new User({ username: req.body.username });
     User.register(newUser, req.body.password, (err, user) => {
         if (err) {
-            console.log(err);
-            req.flash("error", err); //err shows the right error text!
-            return res.render("register"); //return - nice way to get out of callback
+            return res.render("register", { "error": err.message });
+         //return - nice way to get out of callback
         }
         passport.authenticate("local")(req, res, () => {
+            req.flash("success", "Welcome to YelpCamp, " + user.username);
             res.redirect("/campgrounds");
         });
     });

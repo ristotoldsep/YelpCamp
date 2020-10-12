@@ -13,7 +13,7 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next) {
         //Is user logged in?
         if (req.isAuthenticated()) {
             Campground.findById(req.params.id, (err, foundCampground) => {
-                if (err) {
+                if (err || !foundCampground) { /* extra error handling!!!! */
                     req.flash("error", "Campground not found");
                     res.redirect("back");
                 } else {
@@ -37,8 +37,9 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
         //Is user logged in?
         if (req.isAuthenticated()) {
             Comment.findById(req.params.comment_id, (err, foundComment) => {
-                if (err) {
-                    console.log(err);
+                if (err || !foundComment) {
+                    //console.log(err);
+                    req.flash("error", "Comment not found");
                     res.redirect("back");
                 } else {
                     //Does user own the campground?

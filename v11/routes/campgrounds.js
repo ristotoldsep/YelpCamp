@@ -56,8 +56,10 @@ router.get("/new", middleware.isLoggedIn, function (req, res) {
 router.get("/:id", function (req, res) {
     //find the CG with provided id
     Campground.findById(req.params.id).populate("comments").exec(function (err, foundCampground) { //so we would get comments not just their id-s
-        if (err) {
-            console.log(err);
+        if (err || !foundCampground) {
+            //console.log(err);
+            req.flash("error", "Campground not found");
+            res.redirect("back");
         } else {
             //render template with id info
             //console.log(foundCampground); 
