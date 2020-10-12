@@ -1,7 +1,9 @@
 const express = require("express"),
        router = express.Router(),
      passport = require("passport"),
-         User = require("../models/user");
+         User = require("../models/user"),
+   middleware = require("../middleware/index.js"); 
+
 
 //================
 //  ROOT ROUTE - landing page
@@ -26,6 +28,7 @@ router.post("/register", (req, res) => {
     User.register(newUser, req.body.password, (err, user) => {
         if (err) {
             console.log(err);
+            req.flash("error", err); //err shows the right error text!
             return res.render("register"); //return - nice way to get out of callback
         }
         passport.authenticate("local")(req, res, () => {
@@ -52,15 +55,10 @@ router.post("/login", passport.authenticate("local",
 //LOGOUT ROUTE
 router.get("/logout", (req, res) => {
     req.logout();
+    req.flash("success", "Logged out!");
     res.redirect("/campgrounds");
 });
 
-//MIDDLEWARE
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
+//MIDDLEWARE was here
 
 module.exports = router; //Returning router variable

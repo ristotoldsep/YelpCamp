@@ -31,6 +31,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
             //console.log(req.body.comment); //Outputs object with author and text!!! Thanks to comment[text] syntax I wrote to new.ejs
             Comment.create(req.body.comment, (err, comment) => {
                 if (err) {
+                    req.flash("error", "Something went wrong");
                     console.log(err);
                 } else {
                     //add username and id to comment
@@ -43,6 +44,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
                     campground.comments.push(comment);
                     //Saving cg
                     campground.save();
+                    req.flash("success", "Added Comment");
                     res.redirect("/campgrounds/" + campground._id);
                 }
             });
