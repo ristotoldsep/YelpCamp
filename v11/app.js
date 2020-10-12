@@ -24,6 +24,7 @@ const express    = require("express"),
 	  Campground = require("./models/campground"),
 	  Comment    = require("./models/comment"),
 	  User       = require("./models/user"),
+	  flash      = require("connect-flash"),
 	  seedDB     = require("./seeds");
 
 	  //Importing routes from different files to refactor code!
@@ -49,6 +50,8 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public")); //__dirname something new!!!! takes whole path
 //console.log(__dirname);
 app.use(methodOverride("_method"));
+
+app.use(flash()); //Telling the app to use connect-flash
 
 //SCHEMAS IN MODELS FILE NOW
 
