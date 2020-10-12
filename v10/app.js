@@ -32,7 +32,7 @@ const commentRoutes     = require("./routes/comments"),
 	  indexRoutes  		= require("./routes/index");
 	
 		
-//seedDB(); //Every time we start the server, wipe everything!
+// seedDB(); //Every time we start the server, wipe everything!
 
 //APP CONFIG
 mongoose.connect('mongodb://localhost:27017/yelp_camp_v4', { //connected to a yelpcamp DB
