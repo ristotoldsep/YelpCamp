@@ -36,7 +36,8 @@ const commentRoutes     = require("./routes/comments"),
 // seedDB(); //Every time we start the server, wipe everything!
 
 //APP CONFIG
-mongoose.connect(process.env.DATABASEURL, { //connected to a yelpcamp local mongoose DB
+const url = process.env.DATABASEURL || "mongodb://localhost:27017/yelp_camp_v4"; //DATABASE URL environment variable set in heroku
+mongoose.connect(url, { //connected to a yelpcamp local mongoose DB
 // mongoose.connect('mongodb+srv://ristotoldsep:<PASSWORD HERE>@yelpcamp.foevj.mongodb.net/yelpcamp?retryWrites=true&w=majority', { //connected to a yelpcamp local mongoose DB
   useNewUrlParser: true,
   useUnifiedTopology: true,
