@@ -1,7 +1,13 @@
 const express = require("express"),
       router  = express.Router(),
    Campground = require("../models/campground"),
+      Comment = require("../models/comment"),
    middleware = require("../middleware/index.js"); 
+
+// Define escapeRegex function for search feature
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 //================
 //  CAMPGROUND ROUTES
@@ -9,17 +15,30 @@ const express = require("express"),
 
 // INDEX - Shows all Campgrounds
 router.get("/", function (req, res) {
-    // console.log(req.user);
-    //Need to get all campgrounds from DB!
-    // res.render("campgrounds", {campgrounds: campgrounds});
-
-    Campground.find({}, function (err, allCampgrounds) {
-        if (err) {
-            console.log(error);
-        } else {
-            res.render("campgrounds/index", { campgrounds: allCampgrounds });
-        }
-    });
+    if (req.query.search && req.xhr) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        // Get all campgrounds from DB
+        Campground.find({ name: regex }, function (err, allCampgrounds) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.status(200).json(allCampgrounds);
+            }
+        });
+    } else {
+        // Get all campgrounds from DB
+        Campground.find({}, function (err, allCampgrounds) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (req.xhr) {
+                    res.json(allCampgrounds);
+                } else {
+                    res.render("campgrounds/index", { campgrounds: allCampgrounds, page: 'campgrounds' });
+                }
+            }
+        });
+    }
 });
 
 //CREATE - creating new CG
@@ -58,9 +77,9 @@ router.get("/:id", function (req, res) {
     //find the CG with provided id
     Campground.findById(req.params.id).populate("comments").exec(function (err, foundCampground) { //so we would get comments not just their id-s
         if (err || !foundCampground) {
-            //console.log(err);
-            req.flash("error", "Campground not found");
-            res.redirect("back");
+            console.log(err);
+            req.flash('error', 'Sorry, that campground does not exist!');
+            return res.redirect('/campgrounds');
         } else {
             //render template with id info
             //console.log(foundCampground); 
@@ -80,9 +99,10 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, (req, res) => {
 router.put("/:id", middleware.checkCampgroundOwnership, (req, res) => {
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCampground) => {
         if(err) {
-            console.log(err);
-            res.redirect("/campgrounds");
+            req.flash("error", err.message);
+            res.redirect("back");
         } else {
+            req.flash("success", "Successfully Updated!");
             res.redirect("/campgrounds/" + req.params.id);
         }
     });

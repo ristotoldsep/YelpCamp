@@ -4,18 +4,25 @@
 	<header class="jumbotron">
 		<div class ="container">
 			<h1>
-			Welcome to YelpCamp!
+			<span class="glyphicon glyphicon-tent"></span> Welcome to YelpCamp!
 			<p>
-				View our hand-picked campgrounds from all over the world
+				View our hand-picked discgolf courses in Estonia
 			</p>
 			</h1>
 			<p>
 				<a class="btn btn-success btn-lg" href="/campgrounds/new">Add new campground</a>
 			</p>
+			<p>
+              <form action="/campgrounds" method="GET" class="form-inline" id="campground-search">
+                <div class="form-group">
+				  <input type="text" name="search" placeholder="Campground search..." class="form-control">
+                </div>
+              </form>
+             </p>
 		</div>
 	</header>
 
-	<div class="row text-center" style="display:flex; flex-wrap: wrap;">
+	<div class="row text-center display-flex">
 		<% campgrounds.forEach((campground) => { %>
     	<div class="col-md-3 col-sm-6">
 			<div class="thumbnail">
@@ -33,5 +40,7 @@
 	<% }); %> 
 	</div>
 </div>
+
+<!-- <script src="/scripts/search.js" async defer></script> -->
 
 <%- include ("../partials/footer") %>

@@ -25,7 +25,7 @@
 						<%= campground.description %>
 					</p>
 					<p>
-						<em>Created by - <%= campground.author.username %></em>	 
+						<em>Submitted by: <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em>	 
 					</p>
 					<% if(currentUser && campground.author.id.equals(currentUser._id)) { %> <!-- displays buttons if right user is logged in! -->
 						<a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
@@ -47,7 +47,7 @@
 							<strong>
 								<%= comment.author.username %>
 							</strong>
-							<span class="pull-right">10 days ago</span>
+							<span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
 							<p>
 								<%= comment.text %>
 							</p>
@@ -60,6 +60,7 @@
 							</form>
 							<% } %>
 						</div>
+						<hr>
 					</div>
 					
 				<% }); %>

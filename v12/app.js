@@ -18,12 +18,14 @@ const express    = require("express"),
 	  bodyParser = require("body-parser"),
 	  mongoose   = require("mongoose"), //added mongoose database
 	  passport   = require("passport"),
+	  cookieParser = require("cookie-parser"),
 	  LocalStrategy = require("passport-local"),
 	  methodOverride = require("method-override"),
 	  port  	 = process.env.PORT || 3000,
 	  Campground = require("./models/campground"),
 	  Comment    = require("./models/comment"),
 	  User       = require("./models/user"),
+	  session = require("express-session"),
 	  flash      = require("connect-flash"),
 	  seedDB     = require("./seeds");
 
@@ -31,7 +33,9 @@ const express    = require("express"),
 const commentRoutes     = require("./routes/comments"),
 	  campgroundRoutes  = require("./routes/campgrounds"),
 	  indexRoutes  		= require("./routes/index");
-	
+
+// assign mongoose promise library and connect to database
+mongoose.Promise = global.Promise;	  
 		
 // seedDB(); //Every time we start the server, wipe everything!
 
@@ -53,6 +57,9 @@ app.use(express.static(__dirname + "/public")); //__dirname something new!!!! ta
 //console.log(__dirname);
 app.use(methodOverride("_method"));
 
+app.use(cookieParser('secret'));
+//require moment
+app.locals.moment = require('moment');
 app.use(flash()); //Telling the app to use connect-flash
 
 //SCHEMAS IN MODELS FILE NOW
