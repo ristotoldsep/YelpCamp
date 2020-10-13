@@ -36,7 +36,8 @@ const commentRoutes     = require("./routes/comments"),
 // seedDB(); //Every time we start the server, wipe everything!
 
 //APP CONFIG
-mongoose.connect('mongodb://localhost:27017/yelp_camp_v4', { //connected to a yelpcamp DB
+// mongoose.connect('mongodb://localhost:27017/yelp_camp_v4', { //connected to a yelpcamp local mongoose DB
+mongoose.connect('mongodb+srv://ristotoldsep:Monsa1monsa@yelpcamp.foevj.mongodb.net/yelpcamp?retryWrites=true&w=majority', { //connected to a yelpcamp local mongoose DB
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
