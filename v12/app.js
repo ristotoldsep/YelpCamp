@@ -37,7 +37,7 @@ const commentRoutes     = require("./routes/comments"),
 
 //APP CONFIG
 mongoose.connect(process.env.DATABASEURL, { //connected to a yelpcamp local mongoose DB
-// mongoose.connect('mongodb+srv://ristotoldsep:Monsa1monsa@yelpcamp.foevj.mongodb.net/yelpcamp?retryWrites=true&w=majority', { //connected to a yelpcamp local mongoose DB
+// mongoose.connect('mongodb+srv://ristotoldsep:<PASSWORD HERE>@yelpcamp.foevj.mongodb.net/yelpcamp?retryWrites=true&w=majority', { //connected to a yelpcamp local mongoose DB
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
